@@ -221,6 +221,24 @@ void mostrarLivrosAdicionados() {
   }
 }
 
+// Função que exclui os livros
+void excluirLivro() {
+  int id;
+  printf("Digite o ID do livro que deseja excluir: ");
+  scanf("%d", &id);
+
+  if (id >= 0 && id < i) {
+    for (int j = id; j < i - 1; j++) {
+      infoLivro[j] = infoLivro[j + 1];
+      infoLivro[j].idDoLivro = j; // Atualiza os IDs
+    }
+    i--;
+    printf("Livro excluído com sucesso!\n");
+  } else {
+    printf("ID inválido!\n");
+  }
+}
+
 // Função que escolha se você vai buscar ou adicionar os Livros
 int perguntePerfil() {
   int escolherPerfil;
@@ -230,7 +248,8 @@ int perguntePerfil() {
   printf("(1) Ver lista de livros cadastrados\n");
   printf("(2) Adicionar novo livro\n");
   printf("(3) Editar informações de um livro existente\n");
-  printf("(4) Sair do sistema\n");
+  printf("(4) Excluir um livro\n");
+  printf("(5) Sair do sistema\n");
   printf("========================================================================================================= \n");
   printf ("Opção: ");
   scanf ("%d", &escolherPerfil);
@@ -295,8 +314,25 @@ int escolhaPerfil(int opcaoPerfil) {
       } // se ele nao digitar 1 para ficar, vai sair...
     break;
 
-    // SAIR
+    // EXCLUIR
     case 4:
+    excluirLivro();
+    int escolhaContinuarSair4; // criei essa variavel para ele escolher se depois de adicionar o livro vai continuar ou sair...
+
+      printf("\nAperte 1 (Continuar) ou 2 (Sair): ");
+      scanf("%d", &escolhaContinuarSair3);
+
+      if (escolhaContinuarSair3 == 1) {
+        // caso ele digite 1(Continuar) ele vai limpar o console e começar tudo de novo...
+        limparConsole(); 
+        // a mesma coisa do main, vai criar uma variavel com o valor de pergunteperfil() chamar ele, salvar o valor, e chamar a escolha perfil com base no que ele digitou
+        int numPerfil = perguntePerfil();
+        escolhaPerfil(numPerfil);
+      } // se ele nao digitar 1 para ficar, vai sair...
+    break;
+
+    // SAIR
+    case 5:
       exit(0);
     break;
 
