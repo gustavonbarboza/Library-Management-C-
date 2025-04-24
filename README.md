@@ -8,6 +8,7 @@ Este é um sistema simples de gerenciamento de biblioteca desenvolvido em lingua
 - Editar informações de um livro ✏️
 - Excluir livros da biblioteca 🗑️
 - Listar todos os livros registrados 📋
+- Salvar todos os livros adicionados em um arquivo .txt
 
 ## 🛠️ Tecnologias
 
@@ -15,4 +16,10 @@ Este é um sistema simples de gerenciamento de biblioteca desenvolvido em lingua
 - Compilador GCC
 - Terminal / Prompt de comando
 
-## 🗂️ Estrutura
+## 🛠️ Como compilar e executar
+
+Use um compilador C (como `gcc`) no terminal:
+
+```bash
+gcc main.c funcoes.c -o biblioteca
+./biblioteca
