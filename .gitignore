@@ -6,4 +6,4 @@ Thumbs.db
 .vscode/
 
 # Arquivo que o C gera ao ser rodado
-.main
+main
