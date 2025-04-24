@@ -196,27 +196,28 @@ void addLivros() {
     i++;
 }
 
-// Função que vai mostrar a lista de livros adicionados
-void mostrarLivrosAdicionados() {
+void mostrarLivroLooping(int j) {
+  if (j < i) {
+    printf("================================================================== \n");
+    printf("                       INFORMAÇõES DO LIVRO (%d)                    \n", j);
+    printf("================================================================== \n");
+    printf("Nome do livro: %s\n", infoLivro[j].nomeLivro);
+    printf("Autor do livro: %s\n", infoLivro[j].autorLivro);
+    printf("Editora do livro: %s\n", infoLivro[j].editoraLivro);
+    printf("Ano de publicação: %d\n", infoLivro[j].anoPublicacao);
+    printf("Descrição: %s\n", infoLivro[j].descricaoDoLivro);
+    printf("Disponibilidade: %s\n", infoLivro[j].disponibilidade ? "Disponível" : "Indisponível");
+    printf("ID do livro: %d\n", infoLivro[j].idDoLivro);
+    printf("Endereço da alocação dinâmica: %p\n", (void*)&infoLivro[j]);
 
-  // vai verificar se tem livros adicionados
+    mostrarLivroLooping(j + 1); // chamada recursiva para o próximo índice
+  }
+}
+
+void mostrarLivrosAdicionados() {
   if (i > 0) {
-    // vai mostrar na tela todos os livros adicionados
-    for (int j = 0; j < i; j++) {
-      printf("================================================================== \n");
-      printf("                       INFORMAÇõES DO LIVRO (%d)                    \n", j);
-      printf("================================================================== \n");
-      printf("Nome do livro: %s\n", infoLivro[j].nomeLivro);
-      printf("Autor do livro: %s\n", infoLivro[j].autorLivro);
-      printf("Editora do livro: %s\n", infoLivro[j].editoraLivro);
-      printf("Ano de publicação: %d\n", infoLivro[j].anoPublicacao);
-      printf("Descrição: %s\n", infoLivro[j].descricaoDoLivro);
-      printf("Disponibilidade: %s\n", infoLivro[j].disponibilidade ? "Disponível" : "Indiponível");
-      printf("ID do livro: %d\n", infoLivro[j].idDoLivro);
-      printf("Endereço da alocação dinâmica: %p\n", (void*)&infoLivro[j]);
-    }
+    mostrarLivroLooping(0); // inicia a recursão do índice 0
   } else {
-    // caso não tenha nenhum livro adicionado
     printf("Nenhum livro adicionado ainda!\n");
   }
 }
@@ -265,70 +266,74 @@ int escolhaPerfil(int opcaoPerfil) {
 
     //BUSCAR
     case 1:
-      mostrarLivrosAdicionados(); // vai mostrar a lista de livros adicionados
-      int escolhaContinuarSair1;
+      mostrarLivrosAdicionados();
 
-      printf("\nAperte 1 (Continuar) ou 2 (Sair): ");
-      scanf("%d", &escolhaContinuarSair1);
+      // Lopping
+        int escolhaContinuarSair1;
+        printf("\nAperte 1 (Continuar) ou 2 (Sair): ");
+        scanf("%d", &escolhaContinuarSair1);
 
-      if (escolhaContinuarSair1 == 1) {
-        // caso ele digite 1(Continuar) ele vai limpar o console e começar tudo de novo...
-        limparConsole(); 
-        // a mesma coisa do main, vai criar uma variavel com o valor de pergunteperfil() chamar ele, salvar o valor, e chamar a escolha perfil com base no que ele digitou
-        int numPerfil = perguntePerfil();
-        escolhaPerfil(numPerfil);
-      } // se ele nao digitar 1 para ficar, vai sair...
+        if (escolhaContinuarSair1 == 1) {
+          // caso ele digite 1(Continuar) ele vai limpar o console e começar tudo de novo...
+          limparConsole(); 
+          // a mesma coisa do main, vai criar uma variavel com o valor de pergunteperfil() chamar ele, salvar o valor, e chamar a escolha perfil com base no que ele digitou
+          int numPerfil = perguntePerfil();
+          escolhaPerfil(numPerfil);
+        } // se ele nao digitar 1 para ficar, vai sair...
     break;
     
     // ADICIONAR
     case 2:
       addLivros();
-      int escolhaContinuarSair2; // criei essa variavel para ele escolher se depois de adicionar o livro vai continuar ou sair...
 
-      printf("\nAperte 1 (Continuar) ou 2 (Sair): ");
-      scanf("%d", &escolhaContinuarSair2);
+      // Lopping
+        int escolhaContinuarSair2; // criei essa variavel para ele escolher se depois de adicionar o livro vai continuar ou sair...
+        printf("\nAperte 1 (Continuar) ou 2 (Sair): ");
+        scanf("%d", &escolhaContinuarSair2);
 
-      if (escolhaContinuarSair2 == 1) {
-        // caso ele digite 1(Continuar) ele vai limpar o console e começar tudo de novo...
-        limparConsole(); 
-        // a mesma coisa do main, vai criar uma variavel com o valor de pergunteperfil() chamar ele, salvar o valor, e chamar a escolha perfil com base no que ele digitou
-        int numPerfil = perguntePerfil();
-        escolhaPerfil(numPerfil);
-      } // se ele nao digitar 1 para ficar, vai sair...
+        if (escolhaContinuarSair2 == 1) {
+          // caso ele digite 1(Continuar) ele vai limpar o console e começar tudo de novo...
+          limparConsole(); 
+          // a mesma coisa do main, vai criar uma variavel com o valor de pergunteperfil() chamar ele, salvar o valor, e chamar a escolha perfil com base no que ele digitou
+          int numPerfil = perguntePerfil();
+          escolhaPerfil(numPerfil);
+        } // se ele nao digitar 1 para ficar, vai sair...
     break;
 
     // EDITAR
     case 3:
       pergunteIdParaModificar();
-      int escolhaContinuarSair3; // criei essa variavel para ele escolher se depois de adicionar o livro vai continuar ou sair...
 
-      printf("\nAperte 1 (Continuar) ou 2 (Sair): ");
-      scanf("%d", &escolhaContinuarSair3);
+      // Lopping
+        int escolhaContinuarSair3; // criei essa variavel para ele escolher se depois de adicionar o livro vai continuar ou sair...
+        printf("\nAperte 1 (Continuar) ou 2 (Sair): ");
+        scanf("%d", &escolhaContinuarSair3);
 
-      if (escolhaContinuarSair3 == 1) {
-        // caso ele digite 1(Continuar) ele vai limpar o console e começar tudo de novo...
-        limparConsole(); 
-        // a mesma coisa do main, vai criar uma variavel com o valor de pergunteperfil() chamar ele, salvar o valor, e chamar a escolha perfil com base no que ele digitou
-        int numPerfil = perguntePerfil();
-        escolhaPerfil(numPerfil);
-      } // se ele nao digitar 1 para ficar, vai sair...
+        if (escolhaContinuarSair3 == 1) {
+          // caso ele digite 1(Continuar) ele vai limpar o console e começar tudo de novo...
+          limparConsole(); 
+          // a mesma coisa do main, vai criar uma variavel com o valor de pergunteperfil() chamar ele, salvar o valor, e chamar a escolha perfil com base no que ele digitou
+          int numPerfil = perguntePerfil();
+          escolhaPerfil(numPerfil);
+        } // se ele nao digitar 1 para ficar, vai sair...
     break;
 
     // EXCLUIR
     case 4:
     excluirLivro();
-    int escolhaContinuarSair4; // criei essa variavel para ele escolher se depois de adicionar o livro vai continuar ou sair...
 
-      printf("\nAperte 1 (Continuar) ou 2 (Sair): ");
-      scanf("%d", &escolhaContinuarSair3);
+    // Lopping
+      int escolhaContinuarSair4; // criei essa variavel para ele escolher se depois de adicionar o livro vai continuar ou sair...
+        printf("\nAperte 1 (Continuar) ou 2 (Sair): ");
+        scanf("%d", &escolhaContinuarSair4);
 
-      if (escolhaContinuarSair3 == 1) {
-        // caso ele digite 1(Continuar) ele vai limpar o console e começar tudo de novo...
-        limparConsole(); 
-        // a mesma coisa do main, vai criar uma variavel com o valor de pergunteperfil() chamar ele, salvar o valor, e chamar a escolha perfil com base no que ele digitou
-        int numPerfil = perguntePerfil();
-        escolhaPerfil(numPerfil);
-      } // se ele nao digitar 1 para ficar, vai sair...
+        if (escolhaContinuarSair4 == 1) {
+          // caso ele digite 1(Continuar) ele vai limpar o console e começar tudo de novo...
+          limparConsole(); 
+          // a mesma coisa do main, vai criar uma variavel com o valor de pergunteperfil() chamar ele, salvar o valor, e chamar a escolha perfil com base no que ele digitou
+          int numPerfil = perguntePerfil();
+          escolhaPerfil(numPerfil);
+        } // se ele nao digitar 1 para ficar, vai sair...
     break;
 
     // SAIR
