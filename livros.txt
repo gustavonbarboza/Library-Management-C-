@@ -1,0 +1,42 @@
+Nome: Dom Casmurro
+Autor: Machado de Assis
+Editora: Garnier
+Ano de Publicação: 1888
+Descrição: Romance clássico brasileiro que aborda o ciúme e a dúvida sobre a traição de Capitu.
+ID: 0
+Disponibilidade: 1
+Nome: 1984
+Autor: George Orwell
+Editora: Secker & Warburg
+Ano de Publicação: 1949
+Descrição: Distopia política que descreve uma sociedade totalitária vigiada pelo Grande Irmão.
+ID: 1
+Disponibilidade: 1
+Nome: O Pequeno Príncipe
+Autor: Antoine de Saint-ExuGallimard
+Editora: Gallimard
+Ano de Publicação: 1943
+Descrição: Uma história poética e filosófica sobre amizade, amor e perda.
+ID: 2
+Disponibilidade: 1
+Nome: Harry Potter e a Pedra Filosofal
+Autor: J.K. Rowling
+Editora: Bloomsbury
+Ano de Publicação: 1997
+Descrição: O início da jornada do jovem bruxo Harry Potter na escola de magia de Hogwarts.
+ID: 3
+Disponibilidade: 0
+Nome: O Senhor dos Anéis: A Sociedade do Anel
+Autor: J.R.R. Tolkien
+Editora: Allen & Unwin
+Ano de Publicação: 1954
+Descrição: Primeiro volume da trilogia épica de fantasia sobre a missão de destruir o Um Anel.
+ID: 4
+Disponibilidade: 1
+Nome: A Menina que Roubava Livros  
+Autor: Markus Zusak  
+Editora: Intrínseca  
+Ano de Publicação: 2007
+Descrição: A história de uma jovem alemã durante a Segunda Guerra Mundial, narrada pela Morte.  
+ID: 5
+Disponibilidade: 1

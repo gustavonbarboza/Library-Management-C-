@@ -1,0 +1,9 @@
+# Ignora arquivos temporários do sistema
+.DS_Store
+Thumbs.db
+
+# Ignora arquivos do VSCode
+.vscode/
+
+# Arquivo que o C gera ao ser rodado
+.main
