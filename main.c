@@ -10,6 +10,12 @@ void limparConsole() {
   system("clear"); // MacOs ou Linux
 }
 
+// função para não dar erro no scanf
+void limparBufferEntrada() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
+
 // criei a struct global para facilitar a entrada nas funções
 struct infoLivros {
   char nomeLivro[50];
@@ -23,6 +29,11 @@ struct infoLivros {
 
 // Ponteiro global para os livros
 struct infoLivros *infoLivro;
+
+// Ponteiro para a pilha de livros excluídos
+struct infoLivros *pilhaLivrosExcluidos;
+// Contador para o tamanho da pilha (funciona como o topo)
+int tamanhoPilha = 0;
 
 // contador de livros
 int i = 0;
@@ -50,69 +61,69 @@ void editarLivroPorID(struct infoLivros *livro) {
 
   switch (opcaoMudar) {
     case 1:
-    limparConsole();
-    printf(" ================================================================== \n");
-    printf("            DIGITE O NOME DO LIVRO QUE DESEJA ADICIONAR:            \n");
-    printf(" ================================================================== \n");
-    printf(" Nome: ");
-    fflush(stdin);
-    scanf("%[^\n]", livro->nomeLivro);
+      limparConsole();
+      printf(" ================================================================== \n");
+      printf("            DIGITE O NOME DO LIVRO QUE DESEJA ADICIONAR:            \n");
+      printf(" ================================================================== \n");
+      printf(" Nome: ");
+      limparBufferEntrada();
+      scanf("%[^\n]", livro->nomeLivro);
     break;
 
     case 2:
-    limparConsole();
-    printf(" ================================================================== \n");
-    printf("           DIGITE O AUTOR DO LIVRO QUE DESEJA ADICIONAR:            \n");
-    printf(" ================================================================== \n");
-    printf(" Autor: ");
-    fflush(stdin);
-    scanf("%[^\n]", livro->autorLivro);
+      limparConsole();
+      printf(" ================================================================== \n");
+      printf("           DIGITE O AUTOR DO LIVRO QUE DESEJA ADICIONAR:            \n");
+      printf(" ================================================================== \n");
+      printf(" Autor: ");
+      limparBufferEntrada();
+      scanf("%[^\n]", livro->autorLivro);
     break;
 
     case 3:
-    limparConsole();
-    printf(" ================================================================== \n");
-    printf("          DIGITE A EDITORA DO LIVRO QUE DESEJA ADICIONAR:           \n");
-    printf(" ================================================================== \n");
-    printf(" Editora: ");
-    fflush(stdin);
-    scanf("%[^\n]", livro->editoraLivro);
+      limparConsole();
+      printf(" ================================================================== \n");
+      printf("          DIGITE A EDITORA DO LIVRO QUE DESEJA ADICIONAR:           \n");
+      printf(" ================================================================== \n");
+      printf(" Editora: ");
+      limparBufferEntrada();
+      scanf("%[^\n]", livro->editoraLivro);
     break;
 
     case 4:
-    limparConsole();
-    printf(" ================================================================== \n");
-    printf("     DIGITE O ANO DE PUBLICAÇãO DO LIVRO QUE DESEJA ADICIONAR:      \n");
-    printf(" ================================================================== \n");
-    printf(" Ano de publicação: ");
-    fflush(stdin);
-    scanf("%d", &livro->anoPublicacao);
+      limparConsole();
+      printf(" ================================================================== \n");
+      printf("     DIGITE O ANO DE PUBLICAÇãO DO LIVRO QUE DESEJA ADICIONAR:      \n");
+      printf(" ================================================================== \n");
+      printf(" Ano de publicação: ");
+      limparBufferEntrada();
+      scanf("%d", &livro->anoPublicacao);
     break;
 
     case 5:
-    limparConsole();
-    printf(" ================================================================== \n");
-    printf("        DIGITE UMA DESCRIÇãO DO LIVRO QUE DESEJA ADICIONAR:         \n");
-    printf(" ================================================================== \n");
-    printf(" Descrição: ");
-    fflush(stdin);
-    scanf("%[^\n]", livro->descricaoDoLivro);
+      limparConsole();
+      printf(" ================================================================== \n");
+      printf("        DIGITE UMA DESCRIÇãO DO LIVRO QUE DESEJA ADICIONAR:         \n");
+      printf(" ================================================================== \n");
+      printf(" Descrição: ");
+      limparBufferEntrada();
+      scanf("%[^\n]", livro->descricaoDoLivro);
     break;
 
     case 6:
-    limparConsole();
-    printf(" ================================================================== \n");
-    printf("       DIGITE A DISPONIBILIDADE DO LIVRO QUE DESEJA ADICIONAR       \n");
-    printf(" ================================================================== \n");
-    printf(" (1 = Disponível, 0 = Indisponível)\n");
-    printf(" Descrição: ");
-    fflush(stdin);
-    scanf("%d", &livro->disponibilidade);
+      limparConsole();
+      printf(" ================================================================== \n");
+      printf("       DIGITE A DISPONIBILIDADE DO LIVRO QUE DESEJA ADICIONAR       \n");
+      printf(" ================================================================== \n");
+      printf(" (1 = Disponível, 0 = Indisponível)\n");
+      printf(" Descrição: ");
+      limparBufferEntrada();
+      scanf("%d", &livro->disponibilidade);
     break;
 
     default:
       printf("ERRO, TENTE NOVAMENTE\n");
-      break;
+    break;
   }
 
   limparConsole();
@@ -142,7 +153,7 @@ void addLivros() {
     printf("            DIGITE O NOME DO LIVRO QUE DESEJA ADICIONAR:            \n");
     printf(" ================================================================== \n");
     printf("Nome do livro: ");
-    fflush(stdin); // ele vai garantir que nenhuma quebra de linha atrapalhe a leitura do scanf... 
+    limparBufferEntrada(); // ele vai garantir que nenhuma quebra de linha atrapalhe a leitura do scanf...
     scanf("%[^\n]", infoLivro[i].nomeLivro);
     limparConsole();
 
@@ -150,7 +161,7 @@ void addLivros() {
     printf("           DIGITE O AUTOR DO LIVRO QUE DESEJA ADICIONAR:            \n");
     printf(" ================================================================== \n");
     printf("Nome do Autor: ");
-    fflush(stdin); // ele vai garantir que nenhuma quebra de linha atrapalhe a leitura do scanf... 
+    limparBufferEntrada(); // ele vai garantir que nenhuma quebra de linha atrapalhe a leitura do scanf... 
     scanf("%[^\n]", infoLivro[i].autorLivro);
     limparConsole();
 
@@ -158,7 +169,7 @@ void addLivros() {
     printf("          DIGITE A EDITORA DO LIVRO QUE DESEJA ADICIONAR:           \n");
     printf(" ================================================================== \n");
     printf("Nome da Editora: ");
-    fflush(stdin); // ele vai garantir que nenhuma quebra de linha atrapalhe a leitura do scanf... 
+    limparBufferEntrada(); // ele vai garantir que nenhuma quebra de linha atrapalhe a leitura do scanf... 
     scanf("%[^\n]", infoLivro[i].editoraLivro);
     limparConsole();
 
@@ -173,7 +184,7 @@ void addLivros() {
     printf("        DIGITE UMA DESCRIÇãO DO LIVRO QUE DESEJA ADICIONAR:         \n");
     printf(" ================================================================== \n");
     printf("Descrição (max 200 caracteres): ");
-    fflush(stdin); // ele vai garantir que nenhuma quebra de linha atrapalhe a leitura do scanf... 
+    limparBufferEntrada(); // ele vai garantir que nenhuma quebra de linha atrapalhe a leitura do scanf... 
     scanf("%[^\n]", infoLivro[i].descricaoDoLivro);
     limparConsole();
 
@@ -210,13 +221,15 @@ void mostrarLivroLooping(int j) {
     printf("ID do livro: %d\n", infoLivro[j].idDoLivro);
     printf("Endereço da alocação dinâmica: %p\n", (void*)&infoLivro[j]);
 
-    mostrarLivroLooping(j + 1); // chamada recursiva para o próximo índice
+    mostrarLivroLooping(j + 1);
   }
 }
 
 void mostrarLivrosAdicionados() {
+  limparConsole(); 
+
   if (i > 0) {
-    mostrarLivroLooping(0); // inicia a recursão do índice 0
+    mostrarLivroLooping(0);
   } else {
     printf("Nenhum livro adicionado ainda!\n");
   }
@@ -229,15 +242,56 @@ void excluirLivro() {
   scanf("%d", &id);
 
   if (id >= 0 && id < i) {
+    if (tamanhoPilha >= MAX_LIVROS) {
+      printf("Não é possível excluir. A pilha de 'desfazer' está cheia.\n");
+      return;
+    }
+
+    // Empilhar - Copia o livro a ser excluído para a pilha
+    pilhaLivrosExcluidos[tamanhoPilha] = infoLivro[id];
+    tamanhoPilha++; // Aumenta o tamanho da pilha
+
+    // Remove o livro da lista principal
     for (int j = id; j < i - 1; j++) {
       infoLivro[j] = infoLivro[j + 1];
-      infoLivro[j].idDoLivro = j; // Atualiza os IDs
+      infoLivro[j].idDoLivro = j;
     }
-    i--;
-    printf("Livro excluído com sucesso!\n");
+    printf("Livro '%s' excluído com sucesso! (Movido para a lista de 'desfazer')\n", pilhaLivrosExcluidos[tamanhoPilha - 1].nomeLivro);
+    i--; // Diminui o contador de livros
+
   } else {
     printf("ID inválido!\n");
   }
+}
+
+// Função para desfazer a exclusão (desempilhar)
+void desfazerExclusao() {
+  limparConsole();
+  printf(" ================================================================== \n");
+  printf("                     DESFAZER ÚLTIMA EXCLUSÃO                       \n");
+  printf(" ================================================================== \n");
+
+  if (tamanhoPilha == 0) {
+    printf("Não há nenhuma exclusão para ser desfeita.\n");
+    return;
+  }
+
+  if (i >= MAX_LIVROS) {
+    printf("A biblioteca está cheia. Não é possível restaurar o livro.\n");
+    return;
+  }
+
+  // Pega o livro do topo da pilha e diminui o contador da pilha
+  tamanhoPilha--;
+  struct infoLivros livroRestaurado = pilhaLivrosExcluidos[tamanhoPilha];
+
+  // Adiciona o livro de volta à lista principal
+  infoLivro[i] = livroRestaurado;
+  // O livro restaurado recebe o próximo ID disponível
+  infoLivro[i].idDoLivro = i;
+  i++;
+
+  printf("\nLivro '%s' foi restaurado com sucesso!\n", livroRestaurado.nomeLivro);
 }
 
 // Função que escolha se você vai buscar ou adicionar os Livros
@@ -250,7 +304,8 @@ int perguntePerfil() {
   printf("(2) Adicionar novo livro\n");
   printf("(3) Editar informações de um livro existente\n");
   printf("(4) Excluir um livro\n");
-  printf("(5) Sair do sistema\n");
+  printf("(5) Desfazer última exclusão\n");
+  printf("(6) Sair do sistema\n");
   printf("========================================================================================================= \n");
   printf ("Opção: ");
   scanf ("%d", &escolherPerfil);
@@ -320,9 +375,9 @@ int escolhaPerfil(int opcaoPerfil) {
 
     // EXCLUIR
     case 4:
-    excluirLivro();
+      excluirLivro();
 
-    // Lopping
+      // Lopping
       int escolhaContinuarSair4; // criei essa variavel para ele escolher se depois de adicionar o livro vai continuar ou sair...
         printf("\nAperte 1 (Continuar) ou 2 (Sair): ");
         scanf("%d", &escolhaContinuarSair4);
@@ -336,14 +391,32 @@ int escolhaPerfil(int opcaoPerfil) {
         } // se ele nao digitar 1 para ficar, vai sair...
     break;
 
-    // SAIR
+    // Desfazer exclusão
     case 5:
-      exit(0);
+      desfazerExclusao();
+
+      // Lopping
+      int escolhaContinuarSair5; // criei essa variavel para ele escolher se depois de adicionar o livro vai continuar ou sair...
+        printf("\nAperte 1 (Continuar) ou 2 (Sair): ");
+        scanf("%d", &escolhaContinuarSair5);
+
+        if (escolhaContinuarSair5 == 1) {
+
+          // caso ele digite 1(Continuar) ele vai limpar o console e começar tudo de novo...
+          limparConsole();
+          // a mesma coisa do main, vai criar uma variavel com o valor de pergunteperfil() chamar ele, salvar o valor, e chamar a escolha perfil com base no que ele digitou
+          int numPerfil = perguntePerfil();
+          escolhaPerfil(numPerfil);
+        } // se ele nao digitar 1 para ficar, vai sair...
+    break;
+
+    // SAIR
+    case 6:
     break;
 
     default:
       printf("ERRO, TENTE NOVAMENTE\n");
-      break;
+    break;
   }
 
   return opcaoPerfil;
@@ -393,6 +466,7 @@ void carregarLivrosDoArquivo() {
     // Aumenta o contador de livros
     i++;
   }
+  
 
   fclose(arquivo);
 }
@@ -402,6 +476,14 @@ int main() {
   infoLivro = (struct infoLivros*) malloc(MAX_LIVROS * sizeof(struct infoLivros));
   if (infoLivro == NULL) {
     printf("Erro ao alocar memória.\n");
+    return 1;
+  }
+
+  // Criamos a alocação dinâmica para a pilha de excluídos
+  pilhaLivrosExcluidos = (struct infoLivros*) malloc(MAX_LIVROS * sizeof(struct infoLivros));
+  if (pilhaLivrosExcluidos == NULL) {
+    printf("Erro ao alocar memória para a pilha.\n");
+    free(infoLivro); // Libera a memória já alocada
     return 1;
   }
 
@@ -418,6 +500,7 @@ int main() {
 
   // Liberar memoria do nosso pc da alocação dinamica criada
   free(infoLivro); 
+  free(pilhaLivrosExcluidos);
   
   return 0;
 }
