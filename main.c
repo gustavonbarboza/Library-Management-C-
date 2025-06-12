@@ -3,6 +3,7 @@
 #include <string.h>
 
 #define MAX_LIVROS 10 // Define o número máximo de livros que podem ser armazenados
+#define MAX_FILA_ESPERA 5
 
 void limparConsole() {
   // Se houver problemas, comente a linha do sistema não compatível
@@ -25,6 +26,8 @@ struct infoLivros {
   int idDoLivro;
   char descricaoDoLivro[200];
   int disponibilidade; // 1 = disponível, 0 = indisponível
+  char filaDeEspera[MAX_FILA_ESPERA][50]; // nome das pessoas que entrarem na fila de espera
+  int tamanhoFila;
 };
 
 // Ponteiro global para os livros
@@ -32,11 +35,115 @@ struct infoLivros *infoLivro;
 
 // Ponteiro para a pilha de livros excluídos
 struct infoLivros *pilhaLivrosExcluidos;
+
 // Contador para o tamanho da pilha (funciona como o topo)
 int tamanhoPilha = 0;
 
 // contador de livros
 int i = 0;
+
+// Função para emprestimo de livros
+void emprestarLivro() {
+  int id;
+  printf("Digite o ID do livro que deseja pegar emprestado: ");
+  scanf("%d", &id);
+
+  if (id < 0 || id >= i) {
+    printf("\nID inválido!\n");
+    return;
+  }
+
+  limparConsole();
+  struct infoLivros *livro = &infoLivro[id];
+
+  if (livro->disponibilidade == 1) {
+    livro->disponibilidade = 0;
+    printf("Livro '%s' emprestado com sucesso!\n", livro->nomeLivro);
+  } else {
+    printf("O livro '%s' já está emprestado.\n", livro->nomeLivro);
+
+    if (livro->tamanhoFila >= MAX_FILA_ESPERA) {
+      printf("\nA fila de espera para este livro está cheia.\n");
+      return;
+    }
+
+    int opcao;
+    printf("\nDeseja entrar na fila de espera? (1 = Sim, 2 = Não): ");
+    scanf("%d", &opcao);
+
+    if (opcao == 1) {
+      printf("Digite seu nome: ");
+      limparBufferEntrada();
+      // Adiciona a pessoa no final da fila (enqueue)
+      scanf("%[^\n]", livro->filaDeEspera[livro->tamanhoFila]);
+      livro->tamanhoFila++;
+      printf("\nVocê foi adicionado à fila de espera com sucesso!\n");
+    }
+  }
+}
+
+void devolverLivro() {
+  int id;
+  printf("Digite o ID do livro que deseja devolver: ");
+  scanf("%d", &id);
+
+  if (id < 0 || id >= i) {
+    printf("\nID inválido!\n");
+    return;
+  }
+
+  limparConsole();
+  struct infoLivros *livro = &infoLivro[id];
+
+  if (livro->disponibilidade == 1) {
+    printf("\nEste livro já se encontra disponível na biblioteca.\n");
+    return;
+  }
+
+  printf("Livro '%s' devolvido com sucesso!\n", livro->nomeLivro);
+
+  // Verifica se há alguém na fila de espera
+  if (livro->tamanhoFila > 0) {
+    // Pega o nome do primeiro da fila
+    printf("\nO livro foi automaticamente emprestado para '%s', o próximo da fila.\n", livro->filaDeEspera[0]);
+
+    // Move todos os elementos da fila uma posição
+    for (int j = 0; j < livro->tamanhoFila - 1; j++) {
+      strcpy(livro->filaDeEspera[j], livro->filaDeEspera[j + 1]);
+    }
+    livro->tamanhoFila--; // Diminui o tamanho da fila
+  } else {
+    // Se não há ninguém na fila, o livro fica disponível
+    livro->disponibilidade = 1;
+    printf("\nO livro agora está disponível na biblioteca.\n");
+  }
+}
+
+void verTodasAsFilas() {
+  limparConsole();
+  printf("================================================================== \n");
+  printf("                  TODAS AS FILAS DE ESPERA                      \n");
+  printf("================================================================== \n");
+
+  int totalPessoasNaFila = 0;
+
+  // verificar todos os livros cadastrados
+  for (int j = 0; j < i; j++) {
+    // Se a fila do livro atual não estiver vazia
+    if (infoLivro[j].tamanhoFila > 0) {
+      printf("\nLivro: %s (ID: %d)\n", infoLivro[j].nomeLivro, infoLivro[j].idDoLivro);
+      // Mostra cada pessoa na fila daquele livro
+      for (int k = 0; k < infoLivro[j].tamanhoFila; k++) {
+        printf("  %d. %s\n", k + 1, infoLivro[j].filaDeEspera[k]);
+        totalPessoasNaFila++;
+      }
+    }
+  }
+
+  if (totalPessoasNaFila == 0) {
+    printf("\nNinguém está em nenhuma fila de espera no momento.\n");
+  }
+}
 
 // função para modificar as informações dos livros
 void editarLivroPorID(struct infoLivros *livro) {
@@ -305,7 +412,10 @@ int perguntePerfil() {
   printf("(3) Editar informações de um livro existente\n");
   printf("(4) Excluir um livro\n");
   printf("(5) Desfazer última exclusão\n");
-  printf("(6) Sair do sistema\n");
+  printf("(6) Emprestar um livro\n");
+  printf("(7) Devolver um livro\n");
+  printf("(8) Ver todas as filas de espera\n");
+  printf("(9) Sair do sistema\n"); 
   printf("========================================================================================================= \n");
   printf ("Opção: ");
   scanf ("%d", &escolherPerfil);
@@ -316,110 +426,69 @@ int perguntePerfil() {
 
 // Aqui vai pegar o valor da função(perguntePerfil) e colocar dentro dela para separar BUSCAR e ADICIONAR...
 int escolhaPerfil(int opcaoPerfil) {
-  int numMenuBuscarLivros;
   switch (opcaoPerfil) {
 
-    //BUSCAR
+    // BUSCAR
     case 1:
       mostrarLivrosAdicionados();
-
-      // Lopping
-        int escolhaContinuarSair1;
-        printf("\nAperte 1 (Continuar) ou 2 (Sair): ");
-        scanf("%d", &escolhaContinuarSair1);
-
-        if (escolhaContinuarSair1 == 1) {
-          // caso ele digite 1(Continuar) ele vai limpar o console e começar tudo de novo...
-          limparConsole(); 
-          // a mesma coisa do main, vai criar uma variavel com o valor de pergunteperfil() chamar ele, salvar o valor, e chamar a escolha perfil com base no que ele digitou
-          int numPerfil = perguntePerfil();
-          escolhaPerfil(numPerfil);
-        } // se ele nao digitar 1 para ficar, vai sair...
     break;
-    
+
     // ADICIONAR
     case 2:
       addLivros();
-
-      // Lopping
-        int escolhaContinuarSair2; // criei essa variavel para ele escolher se depois de adicionar o livro vai continuar ou sair...
-        printf("\nAperte 1 (Continuar) ou 2 (Sair): ");
-        scanf("%d", &escolhaContinuarSair2);
-
-        if (escolhaContinuarSair2 == 1) {
-          // caso ele digite 1(Continuar) ele vai limpar o console e começar tudo de novo...
-          limparConsole(); 
-          // a mesma coisa do main, vai criar uma variavel com o valor de pergunteperfil() chamar ele, salvar o valor, e chamar a escolha perfil com base no que ele digitou
-          int numPerfil = perguntePerfil();
-          escolhaPerfil(numPerfil);
-        } // se ele nao digitar 1 para ficar, vai sair...
     break;
 
     // EDITAR
     case 3:
       pergunteIdParaModificar();
-
-      // Lopping
-        int escolhaContinuarSair3; // criei essa variavel para ele escolher se depois de adicionar o livro vai continuar ou sair...
-        printf("\nAperte 1 (Continuar) ou 2 (Sair): ");
-        scanf("%d", &escolhaContinuarSair3);
-
-        if (escolhaContinuarSair3 == 1) {
-          // caso ele digite 1(Continuar) ele vai limpar o console e começar tudo de novo...
-          limparConsole(); 
-          // a mesma coisa do main, vai criar uma variavel com o valor de pergunteperfil() chamar ele, salvar o valor, e chamar a escolha perfil com base no que ele digitou
-          int numPerfil = perguntePerfil();
-          escolhaPerfil(numPerfil);
-        } // se ele nao digitar 1 para ficar, vai sair...
     break;
 
     // EXCLUIR
     case 4:
       excluirLivro();
-
-      // Lopping
-      int escolhaContinuarSair4; // criei essa variavel para ele escolher se depois de adicionar o livro vai continuar ou sair...
-        printf("\nAperte 1 (Continuar) ou 2 (Sair): ");
-        scanf("%d", &escolhaContinuarSair4);
-
-        if (escolhaContinuarSair4 == 1) {
-          // caso ele digite 1(Continuar) ele vai limpar o console e começar tudo de novo...
-          limparConsole(); 
-          // a mesma coisa do main, vai criar uma variavel com o valor de pergunteperfil() chamar ele, salvar o valor, e chamar a escolha perfil com base no que ele digitou
-          int numPerfil = perguntePerfil();
-          escolhaPerfil(numPerfil);
-        } // se ele nao digitar 1 para ficar, vai sair...
     break;
 
     // Desfazer exclusão
     case 5:
       desfazerExclusao();
+    break;
 
-      // Lopping
-      int escolhaContinuarSair5; // criei essa variavel para ele escolher se depois de adicionar o livro vai continuar ou sair...
-        printf("\nAperte 1 (Continuar) ou 2 (Sair): ");
-        scanf("%d", &escolhaContinuarSair5);
+    // Emprestimo de livro
+    case 6:
+      emprestarLivro();
+    break;
 
-        if (escolhaContinuarSair5 == 1) {
+    // Devolver livro emprestado
+    case 7:
+      devolverLivro();
+    break;
 
-          // caso ele digite 1(Continuar) ele vai limpar o console e começar tudo de novo...
-          limparConsole();
-          // a mesma coisa do main, vai criar uma variavel com o valor de pergunteperfil() chamar ele, salvar o valor, e chamar a escolha perfil com base no que ele digitou
-          int numPerfil = perguntePerfil();
-          escolhaPerfil(numPerfil);
-        } // se ele nao digitar 1 para ficar, vai sair...
+    // Ver fila de emprestimo (livros)
+    case 8:
+      verTodasAsFilas();
     break;
 
     // SAIR
-    case 6:
+    case 9:
+      return opcaoPerfil;
     break;
 
     default:
       printf("ERRO, TENTE NOVAMENTE\n");
     break;
   }
+  
+  int escolhaContinuarSair;
+  printf("\nAperte 1 (Continuar) ou 2 (Sair): ");
+  scanf("%d", &escolhaContinuarSair);
 
-  return opcaoPerfil;
+  if (escolhaContinuarSair == 1) {
+    limparConsole(); 
+    int numPerfil = perguntePerfil();
+    return escolhaPerfil(numPerfil);
+  }
+  
+  return 9;
 }
 
 // Função que vai salvar todos os livros adicionados em um arquivo
